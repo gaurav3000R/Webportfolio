@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:portfolio/Components/NavBar.dart';
 import 'package:portfolio/Utils/ResponsiveLayout.dart';
@@ -86,11 +88,6 @@ class _LargeChildState extends State<LargeChild>
   void _updateHoverState(bool hover) {
     setState(() {
       isHovered = hover;
-      // if (isHovered) {
-      //   _controller.forward();
-      // } else {
-      //   _controller.reverse();
-      // }
     });
   }
 
@@ -102,6 +99,24 @@ class _LargeChildState extends State<LargeChild>
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
+            // Background Stars
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+              child: CustomPaint(
+                size: Size(double.infinity, double.infinity),
+                painter: StarsPainter(isHovered: isHovered),
+              ),
+            ),
+
             FractionallySizedBox(
               alignment: Alignment.centerRight,
               widthFactor: .5,
@@ -137,8 +152,9 @@ class _LargeChildState extends State<LargeChild>
                             fontWeight: FontWeight.bold,
                             fontFamily: "Montserrat-Regular",
                             color: isHovered
-                                ? AppColors.cosmicBlue
-                                : AppColors.starrySilver,
+                                ? const Color.fromARGB(255, 160, 212,
+                                    255) // Adjust colors as needed
+                                : Colors.white, // Adjust colors as needed
                           ),
                         );
                       },
@@ -153,28 +169,15 @@ class _LargeChildState extends State<LargeChild>
                             text: TextSpan(
                               text: "Welcome To Gaurav's Space Walk"
                                   .substring(0, min(_textAnimation2.value, 30)),
-                              style:
-                                  TextStyle(fontSize: 60, color: Colors.white),
+                              style: TextStyle(
+                                fontSize: 60,
+                                color: Colors.white,
+                              ),
                             ),
                           );
                         },
                       ),
                     ),
-                    // if (!isHovered)
-                    //   Padding(
-                    //     padding: const EdgeInsets.only(left: 12.0, top: 20),
-                    //     child: Text(
-                    //       "LET’S EXPLORE THE Universe",
-                    //       style: TextStyle(
-                    //         fontSize: 60,
-                    //         fontWeight: FontWeight.bold,
-                    //         fontFamily: "Montserrat-Regular",
-                    //         color: isHovered
-                    //             ? AppColors.cosmicBlue
-                    //             : AppColors.starrySilver,
-                    //       ),
-                    //     ),
-                    //   ),
                   ],
                 ),
               ),
@@ -187,6 +190,62 @@ class _LargeChildState extends State<LargeChild>
         ),
       ),
     );
+  }
+}
+
+// Custom painter for drawing stars
+class StarsPainter extends CustomPainter {
+  final bool isHovered;
+
+  StarsPainter({required this.isHovered});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final random = Random();
+    final starPaint = Paint()
+      ..color = Colors.white
+      ..maskFilter = MaskFilter.blur(BlurStyle.solid, 5);
+
+    final starBluePaint = Paint()
+      ..color = Colors.blue.shade500
+      ..maskFilter = MaskFilter.blur(BlurStyle.solid, 5);
+
+    final glowPaint = Paint()
+      ..color = AppColors.astronautOrange // Adjust glow opacity here
+      ..maskFilter =
+          MaskFilter.blur(BlurStyle.solid, 5); // Adjust glow size here
+
+    // Draw static stars
+    for (int i = 0; i < 100; i++) {
+      final x = random.nextDouble() * size.width;
+      final y = random.nextDouble() * size.height;
+      final radius = random.nextDouble() * 2 + 1.0; // Varying star sizes
+
+      canvas.drawCircle(Offset(x, y), radius, starPaint);
+    }
+    for (int i = 0; i < 100; i++) {
+      final x = random.nextDouble() * size.width;
+      final y = random.nextDouble() * size.height;
+      final radius = random.nextDouble() * 1 + 1.0; // Varying star sizes
+
+      canvas.drawCircle(Offset(x, y), radius, starBluePaint);
+    }
+
+    // Draw glowing stars if hovered
+    if (isHovered) {
+      for (int i = 0; i < 20; i++) {
+        final x = random.nextDouble() * size.width;
+        final y = random.nextDouble() * size.height;
+        final radius = random.nextDouble() * 2 + 1.0; // Varying star sizes
+
+        canvas.drawCircle(Offset(x, y), radius, glowPaint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
 
