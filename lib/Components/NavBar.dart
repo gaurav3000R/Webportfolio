@@ -9,7 +9,9 @@ class NavBar extends StatelessWidget {
         padding: EdgeInsets.only(left: 18),
         child: Text(text,
             style: TextStyle(
-                fontFamily: "Montserrat-Bold", fontWeight: FontWeight.bold)),
+                fontFamily: "Montserrat-Bold",
+                fontWeight: FontWeight.bold,
+                color: Colors.white)),
       );
     }).toList();
   }
@@ -43,10 +45,10 @@ class NavBar extends StatelessWidget {
               SizedBox(
                 width: 30,
               ),
-              Text(
-                "Gaurav",
-                style: TextStyle(fontSize: 25, color: Colors.white),
-              ),
+              // Text(
+              //   "Gaurav",
+              //   style: TextStyle(fontSize: 25, color: Colors.white),
+              // ),
             ],
           ),
           if (!ResponsiveLayout.isSmallScreen(context))
@@ -72,7 +74,7 @@ class NavBar extends StatelessWidget {
                   child: Material(
                     color: Colors.transparent,
                     child: Center(
-                      child: Text("Login",
+                      child: Text("Connect",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
